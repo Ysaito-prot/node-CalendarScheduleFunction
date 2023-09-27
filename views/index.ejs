@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>カレンダースケジュール機能実装</title>
+        <link type="text/css" rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <div class="wrapper">
+            <!-- xxxx年xx月を表示 -->
+            <h1 id="header"></h1>
+            <div class="datePushed">押された日付：<span id="pop"></span></div>
+            <!-- ボタンクリックで月移動 -->
+            <div id="next-prev-button">
+                <button id="prev" onclick="prev()">‹</button>
+                <button id="next" onclick="next()">›</button>
+            </div>
+            <!-- カレンダー -->
+            <div id="calendar"></div>
+        </div>
+        <script>
+            let users = JSON.parse('<%= JSON.stringify(users) %>'.replace(/&#34;/g, '"'));
+            const week = ["日", "月", "火", "水", "木", "金", "土"];
+            const today = new Date();
+            // 月末だとずれる可能性があるため、1日固定で取得
+            var showDate = new Date(today.getFullYear(), today.getMonth(), 1);
+
+            // 初期表示
+            window.onload = function () {
+                showProcess(today, calendar);
+            };
+            // 前の月表示
+            function prev() {
+                showDate.setMonth(showDate.getMonth() - 1);
+                showProcess(showDate);
+            }
+
+            // 次の月表示
+            function next() {
+                showDate.setMonth(showDate.getMonth() + 1);
+                showProcess(showDate);
+            }
+
+            // カレンダー表示
+            function showProcess(date) {
+                var year = date.getFullYear();
+                var month = date.getMonth();
+                document.querySelector('#header').innerHTML = year + "年 " + (month + 1) + "月";
+
+                var calendar = createProcess(year, month);
+                document.querySelector('#calendar').innerHTML = calendar;
+
+                // カレンダーの日付データ取得およびクリックイベント付与
+                let pieces = document.querySelectorAll('td');
+                let calendarDate = document.querySelectorAll('.date');
+                pieces.forEach((e) => {
+                    let dateclick = e.querySelector('.date');
+                    let pop = document.querySelector('#pop');
+                    e.querySelector('.date').addEventListener('click', () => {
+                        let clickDate = "";
+
+                        if (e.className === "disabled" && dateclick.textContent > 20) {
+                            clickDate = (year + "年 " + (month) + "月" + dateclick.textContent + "日")
+                        }
+                        if (e.className === "disabled" && dateclick.textContent < 7) {
+                            clickDate = (year + "年 " + (month + 2) + "月" + dateclick.textContent + "日")
+                        }
+                        if (e.className === "" || e.className === "today") {
+                            clickDate = (year + "年 " + (month + 1) + "月" + dateclick.textContent + "日")
+                        }
+                        pop.innerText = clickDate;
+                        openWin();
+                    });
+                });
+                for (var i = 0; i < pieces.length; i++) {
+                    for (let j = 0; j < users.length; j++) {
+                        if (pieces[i].className === "disabled" && calendarDate[i].textContent > 20) {
+                            if (year + "年 " + (month) + "月" + calendarDate[i].textContent + "日" === users[j].date) {
+                                scheduleIn(i, j)
+                            }
+                        }
+                        if (pieces[i].className === "disabled" && calendarDate[i].textContent < 7) {
+                            if (year + "年 " + (month + 2) + "月" + calendarDate[i].textContent + "日" === users[j].date) {
+                                scheduleIn(i, j)
+                            }
+                        }
+                        if (pieces[i].className === "" || pieces.className === "today") {
+                            if (year + "年 " + (month + 1) + "月" + calendarDate[i].textContent + "日" === users[j].date) {
+                                scheduleIn(i, j)
+                            }
+                        }
+                    }
+                }
+            }
+
+            // カレンダー作成
+            function createProcess(year, month) {
+                // 曜日
+                var calendar = "<table><tr class='dayOfWeek'>";
+                for (var i = 0; i < week.length; i++) {
+                    calendar += "<th>" + week[i] + "</th>";
+                }
+                calendar += "</tr>";
+
+                var count = 0;
+                var startDayOfWeek = new Date(year, month, 1).getDay();
+                var endDate = new Date(year, month + 1, 0).getDate();
+                var lastMonthEndDate = new Date(year, month, 0).getDate();
+                var row = Math.ceil((startDayOfWeek + endDate) / week.length);
+
+                // 1行ずつ設定
+                for (var i = 0; i < row; i++) {
+                    calendar += "<tr>";
+                    // 1colum単位で設定
+                    for (var j = 0; j < week.length; j++) {
+                        if (i == 0 && j < startDayOfWeek) {
+                            // 1行目で1日まで先月の日付を設定
+                            calendar += "<td class='disabled'><div class='date'>" + (lastMonthEndDate - startDayOfWeek + j + 1) + "</div><div class='schedule'></div></td>";
+                        } else if (count >= endDate) {
+                            // 最終行で最終日以降、翌月の日付を設定
+                            count++;
+                            calendar += "<td class='disabled'><div class='date'>" + (count - endDate) + "</div><div class='schedule'></div></td>";
+                        } else {
+                            // 当月の日付を曜日に照らし合わせて設定
+                            count++;
+                            if (year == today.getFullYear()
+                                && month == (today.getMonth())
+                                && count == today.getDate()) {
+                                calendar += "<td class='today'><div class='date'>" + count + "</div><div class='schedule'></div></td>";
+                            } else {
+                                calendar += "<td><div class='date'>" + count + "</div><div class='schedule'></div></td>";
+                            }
+                        }
+                    }
+                    calendar += "</tr>";
+                }
+                return calendar;
+            }
+
+            // ポップアップ表示
+            function openWin() {
+                window.open("/create", "myWindow", "width=500,height=500");
+            }
+
+            // スケジュールをカレンダーへ反映
+            function scheduleIn(x, y) {
+                let calendarSchedule = document.querySelectorAll('.schedule');
+                calendarSchedule[x].insertAdjacentHTML('beforeend', `
+                                        <div class="text">
+                                            <a href="/edit/${users[y].id}">${users[y].title}</a>
+                                        </div>
+                               `);
+            }
+
+        </script>
+    </body>
+</html>

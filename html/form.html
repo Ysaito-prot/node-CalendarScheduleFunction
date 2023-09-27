@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>スケジュール入力フォーム</title>
+        <link type="text/css" rel="stylesheet" href="/css/style.css">
+    </head>
+    <body>
+        <h1>スケジュール入力フォーム</h1>
+        <form class="scheduleForm" action="/" method="POST">
+            <div class="dateForm">
+                <label for="date">日付：</label><br>
+                <input type="text" id="date" name="date" required>
+            </div>
+            <div>
+                <label for="title">タイトル：</label><br>
+                <input type="text" id="title" name="title" pattern="^[ぁ-んァ-ヶー-龥々a-z0-9\-]+$" maxlength="15" placeholder="ひらがな・カナ・漢字・英数字のみ" required>
+            </div>
+            <div>
+                <label for="name">記入者：</label><br>
+                <input type="text" id="name" name="name" pattern="^[ぁ-んァ-ヶー-龥々a-z\-]+$" maxlength="10" placeholder="ひらがな・カナ・漢字・英字のみ" required>
+            </div>
+            <div>
+                <label for="content">スケジュール内容：</label><br>
+                <textarea id="content" name="content" cols="36" rows="6" maxlength="100" required></textarea>
+            </div>
+            <div class="button"><button class="submitBtn" type="submit">送信</button></div>
+        </form>
+    </body>
+    <script>
+        let date = document.querySelector('#date');
+        date.value = this.opener.document.getElementById('pop').innerText;
+    </script>
+</html>

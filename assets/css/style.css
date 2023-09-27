@@ -1,0 +1,211 @@
+@charset "utf-8";
+
+/*全体*/
+.wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  color: #666;
+}
+#header {
+  text-align: center;
+  font-size: 24px;
+  width: 100%;
+  margin: 1rem 0 0;
+}
+
+/*カレンダー*/
+#calendar {
+  text-align: center;
+  width: 100%;
+}
+table {
+  outline: 2px solid #ddd;
+  border-collapse: collapse;
+  width: 100%;
+}
+th {
+  color: #000;
+}
+th,
+td {
+  width: 150px;
+  outline: 1px solid #ddd;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+td {
+  height: 100px;
+  vertical-align: top;
+}
+/*日曜日*/
+td:first-child {
+  color: red;
+}
+/*土曜日*/
+td:last-child {
+  color: blue;
+}
+/*前後月の日付*/
+td.disabled {
+  color: #ccc;
+}
+/*本日*/
+td.today {
+  background-color: #d65e72;
+  color: #fff;
+}
+
+/*ボタン*/
+#next-prev-button {
+  position: relative;
+}
+#next-prev-button button {
+  cursor: pointer;
+  background: #b78d4a;
+  color: #fff;
+  border: 1px solid #b78d4a;
+  border-radius: 4px;
+  font-size: 1rem;
+  padding: 0.5rem 2rem;
+  margin: 1rem 0;
+}
+#next-prev-button button:hover {
+  background-color: #d4bb92;
+  border-color: #d4bb92;
+}
+#prev {
+  float: left;
+}
+#next {
+  float: right;
+}
+
+/* スケジュール */
+.text {
+  background: #bbffbd;
+  border: 1px solid #cfcfcf;
+  border-radius: 5px;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+.text a {
+  display:inline-block;
+  width: 150px;
+}
+
+.datePushed {
+  display: none;
+}
+
+/* スケジュール入力フォーム画面 */
+.dateForm {
+  display: none;
+}
+
+h1 {
+  text-align: center;
+}
+h1, .scheduleForm {
+  width: 400px;
+  margin: auto;
+}
+
+.scheduleForm div {
+  width: 300px;
+  margin: auto;
+  margin-top: 10px;
+}
+
+label {
+  margin-bottom: 0;
+}
+
+input[type="text"],
+textarea {
+  width: 300px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: rgba(118, 123, 204, 0.5);
+}
+
+.button {
+  width: 200px;
+  text-align: center;
+}
+
+.submitBtn {
+  width: 100px;
+  text-align: center;
+  margin: auto;
+}
+
+/* フォーム送信後画面 */
+.save {
+  margin-top: 10px;
+  font-size: 25px;
+}
+
+.message {
+  font-size: 15px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* 編集フォーム画面 */
+.edit h1, form {
+  width: 800px;
+  margin: auto;
+}
+
+.editForm div {
+  width: 600px;
+  margin: auto;
+  margin-top: 10px;
+  font-size: 20px;
+}
+
+.editForm label {
+  margin-bottom: 0;
+}
+
+.editForm input[type="text"],
+.editForm textarea {
+  width: 600px;
+  padding: 10px;
+  font-size: 20px;
+  border: 1px solid #ccc;
+  background-color: rgba(118, 123, 204, 0.5);
+}
+
+.editForm .button {
+  width: 100px;
+  text-align: center;
+}
+
+.editForm .submitBtn {
+  width: 100px;
+  text-align: center;
+  margin: auto;
+}
+
+.deleteBtn {
+  width: 100px;
+  text-align: center;
+  margin: auto;
+  padding: 0;
+}
+
+.deleteBtn a {
+  display: inline-block;
+  width: 100px;
+}
+
+.btns {
+  margin: auto;
+  text-align: center;
+}
